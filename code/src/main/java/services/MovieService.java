@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dataModel.Movie;
 import dataModel.MovieCombination;
 import dataModel.Performance;
+import enums.Genre;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,9 +17,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MovieService {
     ObjectMapper mapper;
@@ -50,7 +50,6 @@ public class MovieService {
                         + conn.getResponseCode());
             }
 
-            System.out.println("Output from Server .... \n "+ conn.getInputStream());
             movies = mapper.readValue(conn.getInputStream(), new TypeReference<List<Movie>>(){});
 
             conn.disconnect();
@@ -100,7 +99,7 @@ public class MovieService {
         return movies;
     }
 
-    public void getMovieCombinations (List<Movie> movies) {
+    public List<MovieCombination> getMovieCombinations (List<Movie> movies) {
         List<MovieCombination> movieCombinations = new ArrayList<>();
 
         for (Movie baseMovie : movies) {
@@ -120,6 +119,43 @@ public class MovieService {
                 }
             }
         }
-        System.out.println(movieCombinations);
+        return movieCombinations;
+    }
+
+    public List<MovieCombination> getMovieCombinationsExcludeGenres(List<Movie> movies, List<Genre> exludeGenres) {
+        List<MovieCombination> movieCombinations = new ArrayList<>();
+
+        for (Movie baseMovie : movies) {
+            if(containsGenre(baseMovie.getGenres(), exludeGenres)){
+                continue;
+            }
+
+            for (Performance basePerformance : baseMovie.getPerformances()) {
+                for (Movie movie : movies) {
+                    if (movie.getId().equals(baseMovie.getId()) || containsGenre(movie.getGenres(), exludeGenres)) {
+                        continue;
+                    }
+
+                    for (Performance performance : movie.getPerformances()) {
+                        if (basePerformance.getEndDateTime().isBefore(performance.getStartDateTime())) {
+                            MovieCombination combination = new MovieCombination(baseMovie, basePerformance, movie, performance);
+                            movieCombinations.add(combination);
+                        }
+
+                    }
+                }
+            }
+        }
+        return movieCombinations;
+    }
+
+    private boolean containsGenre(String genres,  List<Genre> excludeGenres){
+        for (Genre excludedGenre : excludeGenres) {
+            if (genres.contains(excludedGenre.genre().toLowerCase())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
