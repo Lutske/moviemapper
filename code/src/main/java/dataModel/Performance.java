@@ -3,6 +3,8 @@ package dataModel;
 import com.fasterxml.jackson.annotation.*;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -373,6 +375,18 @@ public class Performance {
         return start;
     }
 
+    public LocalDateTime getStartDateTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return LocalDateTime.parse(start, formatter);
+
+    }
+
+    public String getStartTime(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        LocalDateTime startDateTime = getStartDateTime();
+        return startDateTime.format(formatter);
+    }
+
     @JsonProperty("start")
     public void setStart(String start) {
         this.start = start;
@@ -386,6 +400,19 @@ public class Performance {
     @JsonProperty("end")
     public String getEnd() {
         return end;
+    }
+
+
+    public LocalDateTime getEndDateTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return LocalDateTime.parse(end, formatter);
+
+    }
+
+    public String getEndTime(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        LocalDateTime endDateTime = getEndDateTime();
+        return endDateTime.format(formatter);
     }
 
     @JsonProperty("end")
