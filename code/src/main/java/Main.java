@@ -8,7 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
         movieService = new MovieService();
-        List<Movie> movies = movieService.readMoviesFromFile();
+        List<Movie> movies = movieService.getAllMoviesAfterDateTime(4, "2018-10-29 17:30:00");
         movieService.getMovieCombinations(movies);
 
     }
