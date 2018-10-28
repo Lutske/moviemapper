@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dataModel.Movie;
 import dataModel.MovieCombination;
 import dataModel.Performance;
+import enums.Cinema;
 import enums.Genre;
 import org.apache.commons.lang.StringUtils;
 
@@ -26,12 +27,15 @@ public class MovieService {
         mapper = new ObjectMapper();
     }
 
+    public List<Movie> getAllMoviesAfterDateTime(Cinema cinema, String dateTime){
+        return getAllMoviesAfterDateTime(cinema.cinemaId(), dateTime);
+    }
 
     public List<Movie> getAllMoviesAfterDateTime(int cinemaId, String dateTime) {
         List<Movie> movies = new ArrayList<>();
 
-        if(cinemaId == 0){
-            cinemaId = 4;
+        if(cinemaId < 1 || cinemaId > 23){
+            cinemaId = Cinema.APELDOORN.cinemaId();
         }
 
         System.out.println("Get movies after " + dateTime);

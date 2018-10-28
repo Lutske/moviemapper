@@ -1,5 +1,6 @@
 import dataModel.Movie;
 import dataModel.MovieCombination;
+import enums.Cinema;
 import enums.Genre;
 import services.MovieService;
 
@@ -22,13 +23,13 @@ public class Main {
     }
 
     private static void demoGetRealTimeMovieCombinations(){
-        List<Movie> movies = movieService.getAllMoviesAfterDateTime(4, "2018-10-29 17:30:00");
+        List<Movie> movies = movieService.getAllMoviesAfterDateTime(Cinema.APELDOORN, "2018-10-29 17:30:00");
         List<MovieCombination> movieCombinations = movieService.getMovieCombinations(movies);
         System.out.println(movieCombinations);
     }
 
     private static void demoGetRealTimeMovieCombinationsExcludeGenre(){
-        List<Movie> movies = movieService.getAllMoviesAfterDateTime(4, "2018-10-29 17:30:00");
+        List<Movie> movies = movieService.getAllMoviesAfterDateTime(Cinema.APELDOORN, "2018-10-29 17:30:00");
         List<Genre> genres = new ArrayList<>();
         genres.add(Genre.THRILLER);
 
