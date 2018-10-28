@@ -64,20 +64,21 @@ public class MovieService {
     public void getMovieCombinations (List<Movie> movies) {
         List<MovieCombination> movieCombinations = new ArrayList<>();
 
-        Movie beginMovie = movies.get(0);
-        Performance beginPerformance = beginMovie.getPerformances().get(0);
+        for (Movie baseMovie : movies) {
+            for (Performance basePerformance : baseMovie.getPerformances()) {
+                for (Movie movie : movies) {
+                    if (movie.getId().equals(baseMovie.getId())) {
+                        continue;
+                    }
 
-        for (Movie movie : movies) {
-            if(movie.getId().equals(beginMovie.getId())){
-                continue;
-            }
+                    for (Performance performance : movie.getPerformances()) {
+                        if (basePerformance.getEndDateTime().isBefore(performance.getStartDateTime())) {
+                            MovieCombination combination = new MovieCombination(baseMovie, basePerformance, movie, performance);
+                            movieCombinations.add(combination);
+                        }
 
-            for (Performance performance: movie.getPerformances()) {
-                if(beginPerformance.getEndDateTime().isBefore(performance.getStartDateTime())){
-                    MovieCombination combination = new MovieCombination(beginMovie, beginPerformance, movie, performance );
-                    movieCombinations.add(combination);
+                    }
                 }
-
             }
         }
         System.out.println(movieCombinations);

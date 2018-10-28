@@ -8,9 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
         movieService = new MovieService();
-        movieService.readMovieFromFile();
         List<Movie> movies = movieService.readMoviesFromFile();
-        System.out.println(movies);
         movieService.getMovieCombinations(movies);
 
     }
