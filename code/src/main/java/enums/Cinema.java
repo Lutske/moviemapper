@@ -25,7 +25,7 @@ public enum Cinema {
 
     private final int cinemaId;
 
-    Cinema(int cinemaId){
+    Cinema(int cinemaId) {
         this.cinemaId = cinemaId;
     }
 

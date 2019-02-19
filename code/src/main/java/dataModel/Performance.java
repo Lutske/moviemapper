@@ -105,13 +105,11 @@ public class Performance {
 
     /**
      * No args constructor for use in serialization
-     *
      */
     public Performance() {
     }
 
     /**
-     *
      * @param has3d
      * @param movieId
      * @param isEdited
@@ -381,7 +379,7 @@ public class Performance {
 
     }
 
-    public String getStartTime(){
+    public String getStartTime() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         LocalDateTime startDateTime = getStartDateTime();
         return startDateTime.format(formatter);
@@ -409,7 +407,7 @@ public class Performance {
 
     }
 
-    public String getEndTime(){
+    public String getEndTime() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         LocalDateTime endDateTime = getEndDateTime();
         return endDateTime.format(formatter);

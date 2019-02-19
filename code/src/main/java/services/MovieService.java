@@ -9,32 +9,30 @@ import dataModel.MovieCombination;
 import dataModel.Performance;
 import enums.Cinema;
 import enums.Genre;
-import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MovieService {
     ObjectMapper mapper;
 
-    public MovieService(){
+    public MovieService() {
         mapper = new ObjectMapper();
     }
 
-    public List<Movie> getAllMoviesAfterDateTime(Cinema cinema, String dateTime){
+    public List<Movie> getAllMoviesAfterDateTime(Cinema cinema, String dateTime) {
         return getAllMoviesAfterDateTime(cinema.cinemaId(), dateTime);
     }
 
     public List<Movie> getAllMoviesAfterDateTime(int cinemaId, String dateTime) {
         List<Movie> movies = new ArrayList<>();
 
-        if(cinemaId < 1 || cinemaId > 23){
+        if (cinemaId < 1 || cinemaId > 23) {
             cinemaId = Cinema.APELDOORN.cinemaId();
         }
 
@@ -54,7 +52,8 @@ public class MovieService {
                         + conn.getResponseCode());
             }
 
-            movies = mapper.readValue(conn.getInputStream(), new TypeReference<List<Movie>>(){});
+            movies = mapper.readValue(conn.getInputStream(), new TypeReference<List<Movie>>() {
+            });
 
             conn.disconnect();
         } catch (MalformedURLException e) {
@@ -70,13 +69,12 @@ public class MovieService {
         return movies;
     }
 
-    public void readMovieFromFile(){
+    public void readMovieFromFile() {
         String pathname = "C:\\code\\movie_mapper\\code\\src\\main\\resources\\one_movie.json";
         try {
             Movie movie = mapper.readValue(new File(pathname), Movie.class);
             System.out.println(movie);
-        }
-        catch (JsonGenerationException e) {
+        } catch (JsonGenerationException e) {
             e.printStackTrace();
         } catch (JsonMappingException e) {
             e.printStackTrace();
@@ -85,14 +83,14 @@ public class MovieService {
         }
     }
 
-    public List<Movie> readMoviesFromFile(){
+    public List<Movie> readMoviesFromFile() {
         String pathname = "C:\\code\\movie_mapper\\code\\src\\main\\resources\\all_movies_after_1730_on_29_10_2018.json";
         List<Movie> movies = new ArrayList<>();
 
         try {
-            movies = mapper.readValue(new File(pathname), new TypeReference<List<Movie>>(){});
-        }
-        catch (JsonGenerationException e) {
+            movies = mapper.readValue(new File(pathname), new TypeReference<List<Movie>>() {
+            });
+        } catch (JsonGenerationException e) {
             e.printStackTrace();
         } catch (JsonMappingException e) {
             e.printStackTrace();
@@ -103,7 +101,7 @@ public class MovieService {
         return movies;
     }
 
-    public List<MovieCombination> getMovieCombinations (List<Movie> movies) {
+    public List<MovieCombination> getMovieCombinations(List<Movie> movies) {
         List<MovieCombination> movieCombinations = new ArrayList<>();
 
         for (Movie baseMovie : movies) {
@@ -130,7 +128,7 @@ public class MovieService {
         List<MovieCombination> movieCombinations = new ArrayList<>();
 
         for (Movie baseMovie : movies) {
-            if(containsGenre(baseMovie.getGenres(), exludeGenres)){
+            if (containsGenre(baseMovie.getGenres(), exludeGenres)) {
                 continue;
             }
 

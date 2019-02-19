@@ -15,12 +15,12 @@ public class MovieCombination {
         this.secondPerformance = secondPerformance;
     }
 
-    public void setFirstMoviePerformance(Movie firstMovie, Performance firstPerformance){
+    public void setFirstMoviePerformance(Movie firstMovie, Performance firstPerformance) {
         this.firstMovie = firstMovie;
         this.firstPerformance = firstPerformance;
     }
 
-    public void seSecondMoviePerformance(Movie secondMovie, Performance secondPerformance){
+    public void seSecondMoviePerformance(Movie secondMovie, Performance secondPerformance) {
         this.secondMovie = secondMovie;
         this.secondPerformance = secondPerformance;
     }
