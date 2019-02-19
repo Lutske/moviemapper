@@ -14,6 +14,7 @@ public class Main {
         movieService = new MovieService();
         demoGetRealTimeMovieCombinationsExcludeGenre();
 
+        movieService.prettyPrintAllMovies();
     }
 
     private static void demoGetFromFileMovieCombinations(){
@@ -32,6 +33,7 @@ public class Main {
         List<Movie> movies = movieService.getAllMoviesAfterDateTime(Cinema.APELDOORN, "2018-10-29 17:30:00");
         List<Genre> genres = new ArrayList<>();
         genres.add(Genre.THRILLER);
+        genres.add(Genre.HORROR);
 
         List<MovieCombination> movieCombinations = movieService.getMovieCombinationsExcludeGenres(movies, genres);
         System.out.println(movieCombinations);

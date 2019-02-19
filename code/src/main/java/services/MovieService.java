@@ -153,13 +153,25 @@ public class MovieService {
         return movieCombinations;
     }
 
-    private boolean containsGenre(String genres,  List<Genre> excludeGenres){
+    public void prettyPrintAllMovies() {
+        prettyPrintAllMovies(Cinema.APELDOORN, "2019-02-21 17:00:00");
+    }
+
+    public void prettyPrintAllMovies(Cinema cinema, String dateTime) {
+        List<Movie> movies = getAllMoviesAfterDateTime(cinema, dateTime);
+        for (Movie movie : movies) {
+            for (Performance performance : movie.getPerformances()) {
+                System.out.print("\n".concat(performance.getStartTime()).concat(" - ").concat(performance.getEndTime()).concat(" ").concat(movie.getTitle()));
+            }
+        }
+    }
+
+    private boolean containsGenre(String genres, List<Genre> excludeGenres) {
         for (Genre excludedGenre : excludeGenres) {
             if (genres.contains(excludedGenre.genre().toLowerCase())) {
                 return true;
             }
         }
-
         return false;
     }
 }
