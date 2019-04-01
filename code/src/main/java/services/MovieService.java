@@ -109,7 +109,7 @@ public class MovieService {
                     }
 
                     for (Performance performance : movie.getPerformances()) {
-                        if (basePerformance.getEndDateTime().isBefore(performance.getStartDateTime())) {
+                        if (startsBeforeOtherPerformance(basePerformance, performance)) {
                             MovieCombination combination = new MovieCombination(baseMovie, basePerformance, movie, performance);
                             movieCombinations.add(combination);
                         }
@@ -156,5 +156,9 @@ public class MovieService {
             }
         }
         return false;
+    }
+
+    private boolean startsBeforeOtherPerformance(Performance basePerformance, Performance performance){
+        return basePerformance.getEndDateTime().isBefore(performance.getStartDateTime());
     }
 }
