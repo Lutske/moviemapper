@@ -17,6 +17,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MovieService {
     ObjectMapper mapper;
@@ -57,13 +58,9 @@ public class MovieService {
 
             conn.disconnect();
         } catch (MalformedURLException e) {
-
             e.printStackTrace();
-
         } catch (IOException e) {
-
             e.printStackTrace();
-
         }
 
         return movies;
@@ -107,7 +104,7 @@ public class MovieService {
         for (Movie baseMovie : movies) {
             for (Performance basePerformance : baseMovie.getPerformances()) {
                 for (Movie movie : movies) {
-                    if (movie.getId().equals(baseMovie.getId())) {
+                    if (isTheSameMovie(baseMovie, movie)) {
                         continue;
                     }
 
@@ -116,7 +113,6 @@ public class MovieService {
                             MovieCombination combination = new MovieCombination(baseMovie, basePerformance, movie, performance);
                             movieCombinations.add(combination);
                         }
-
                     }
                 }
             }
@@ -125,30 +121,11 @@ public class MovieService {
     }
 
     public List<MovieCombination> getMovieCombinationsExcludeGenres(List<Movie> movies, List<Genre> exludeGenres) {
-        List<MovieCombination> movieCombinations = new ArrayList<>();
+        List<Movie> moviesWithRightGenres = movies.stream()
+                .filter(baseMovie -> !containsGenre(baseMovie.getGenres(), exludeGenres))
+                .collect(Collectors.toList());
 
-        for (Movie baseMovie : movies) {
-            if (containsGenre(baseMovie.getGenres(), exludeGenres)) {
-                continue;
-            }
-
-            for (Performance basePerformance : baseMovie.getPerformances()) {
-                for (Movie movie : movies) {
-                    if (movie.getId().equals(baseMovie.getId()) || containsGenre(movie.getGenres(), exludeGenres)) {
-                        continue;
-                    }
-
-                    for (Performance performance : movie.getPerformances()) {
-                        if (basePerformance.getEndDateTime().isBefore(performance.getStartDateTime())) {
-                            MovieCombination combination = new MovieCombination(baseMovie, basePerformance, movie, performance);
-                            movieCombinations.add(combination);
-                        }
-
-                    }
-                }
-            }
-        }
-        return movieCombinations;
+        return getMovieCombinations(moviesWithRightGenres);
     }
 
     public void prettyPrintAllMovies() {
@@ -157,11 +134,19 @@ public class MovieService {
 
     public void prettyPrintAllMovies(Cinema cinema, String dateTime) {
         List<Movie> movies = getAllMoviesAfterDateTime(cinema, dateTime);
+        prettyPrintMovies(movies);
+    }
+
+    public void prettyPrintMovies(List<Movie> movies) {
         for (Movie movie : movies) {
             for (Performance performance : movie.getPerformances()) {
                 System.out.print("\n".concat(performance.getStartTime()).concat(" - ").concat(performance.getEndTime()).concat(" ").concat(movie.getTitle()));
             }
         }
+    }
+
+    private boolean isTheSameMovie(Movie baseMovie, Movie movie){
+        return movie.getId().equals(baseMovie.getId());
     }
 
     private boolean containsGenre(String genres, List<Genre> excludeGenres) {

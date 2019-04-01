@@ -29,7 +29,7 @@ public class Main {
     }
 
     private static void demoGetRealTimeMovieCombinationsExcludeGenre() {
-        List<Movie> movies = movieService.getAllMoviesAfterDateTime(Cinema.APELDOORN, "2019-02-21 17:00:00");
+        List<Movie> movies = movieService.getAllMoviesAfterDateTime(Cinema.APELDOORN, "2019-04-01 17:00:00");
 
         List<Genre> genres = new ArrayList<>();
         genres.add(Genre.THRILLER);
