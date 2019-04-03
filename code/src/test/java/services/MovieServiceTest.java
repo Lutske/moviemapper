@@ -13,26 +13,35 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MovieServiceTest {
-    MovieService movieService = new MovieService();
+    private MovieService movieService = new MovieService();
 
     @Test
     @DisplayName("Read movies from file")
     void readMoviesFromFile(){
-
         List<Movie> movies = movieService.readMoviesFromFile();
 
         assertEquals(11, movies.size(), "Wrong number of movies");
+
+        movies = movieService.read3MoviesFromFile();
+
+        assertEquals(3, movies.size(), "Wrong number of movies");
     }
 
     @Test
     @DisplayName("Get movie combinations")
     void getMovieCombinations(){
-
         List<Movie> movies = movieService.readMoviesFromFile();
         List<MovieCombination> movieCombinations = movieService.getMovieCombinations(movies);
 
         assertEquals(11, movies.size(), "Wrong number of movies");
-        assertEquals(24, movieCombinations.size(), "Wrong number of moviecombinations");
+        assertEquals(13, movieCombinations.size(), "Wrong number of moviecombinations");
+
+        movies = movieService.read3MoviesFromFile();
+        movieCombinations = movieService.getMovieCombinations(movies);
+
+        assertEquals(3, movies.size(), "Wrong number of movies");
+        assertEquals(2, movieCombinations.size(), "Wrong number of moviecombinations");
+
     }
 
     @Test
@@ -46,6 +55,12 @@ public class MovieServiceTest {
         List<MovieCombination> movieCombinations = movieService.getMovieCombinationsExcludeGenres(movies, excludeGenres);
 
         assertEquals(11, movies.size(), "Wrong number of movies");
-        assertEquals(5, movieCombinations.size(), "Wrong number of moviecombinations");
+        assertEquals(4, movieCombinations.size(), "Wrong number of moviecombinations");
+
+        movies = movieService.read3MoviesFromFile();
+        movieCombinations = movieService.getMovieCombinationsExcludeGenres(movies, excludeGenres);
+
+        assertEquals(3, movies.size(), "Wrong number of movies");
+        assertEquals(1, movieCombinations.size(), "Wrong number of moviecombinations");
     }
 }

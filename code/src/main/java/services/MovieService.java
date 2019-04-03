@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +26,20 @@ public class MovieService {
 
     public MovieService() {
         mapper = new ObjectMapper();
+    }
+
+    public String localDateTimeToString(LocalDateTime localDateTime){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return localDateTime.format(formatter);
+    }
+
+    public LocalDateTime stringToLocalDateTime(String dateTime){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return LocalDateTime.parse(dateTime, formatter);
+    }
+
+    public List<Movie> getAllMoviesAfterDateTime(Cinema cinema, LocalDateTime localDateTime) {
+        return getAllMoviesAfterDateTime(cinema.cinemaId(), localDateTimeToString(localDateTime));
     }
 
     public List<Movie> getAllMoviesAfterDateTime(Cinema cinema, String dateTime) {
@@ -80,8 +96,15 @@ public class MovieService {
         }
     }
 
-    public List<Movie> readMoviesFromFile() {
-        String pathname = "C:\\code\\movie_mapper\\code\\src\\main\\resources\\all_movies_after_1730_on_29_10_2018.json";
+    public List<Movie> read3MoviesFromFile(){
+        return readMoviesFromFile("C:\\code\\movie_mapper\\code\\src\\main\\resources\\3_movies.json");
+    }
+
+    public List<Movie> readMoviesFromFile(){
+        return readMoviesFromFile("C:\\code\\movie_mapper\\code\\src\\main\\resources\\all_movies_after_1730_on_29_10_2018.json");
+    }
+
+    public List<Movie> readMoviesFromFile(String pathname) {
         List<Movie> movies = new ArrayList<>();
 
         try {
@@ -109,7 +132,7 @@ public class MovieService {
                     }
 
                     for (Performance performance : movie.getPerformances()) {
-                        if (startsBeforeOtherPerformance(basePerformance, performance)) {
+                        if (startsBeforeOtherPerformanceInReasonableTime(basePerformance, performance)) {
                             MovieCombination combination = new MovieCombination(baseMovie, basePerformance, movie, performance);
                             movieCombinations.add(combination);
                         }
@@ -129,11 +152,19 @@ public class MovieService {
     }
 
     public void prettyPrintAllMovies() {
-        prettyPrintAllMovies(Cinema.APELDOORN, "2019-02-21 17:00:00");
+        prettyPrintAllMovies(Cinema.APELDOORN, localDateTimeToString(LocalDateTime.now()));
     }
 
-    public void prettyPrintAllMovies(Cinema cinema, String dateTime) {
-        List<Movie> movies = getAllMoviesAfterDateTime(cinema, dateTime);
+    public void prettyPrintAllMovies(String dateTime) {
+        prettyPrintAllMovies(Cinema.APELDOORN, dateTime);
+    }
+
+    public void prettyPrintAllMovies(LocalDateTime localDateTime) {
+        prettyPrintAllMovies(Cinema.APELDOORN, localDateTimeToString(localDateTime));
+    }
+
+    public void prettyPrintAllMovies(Cinema cinema, String startDateTime) {
+        List<Movie> movies = getAllMoviesAfterDateTime(cinema, startDateTime);
         prettyPrintMovies(movies);
     }
 
@@ -158,7 +189,9 @@ public class MovieService {
         return false;
     }
 
-    private boolean startsBeforeOtherPerformance(Performance basePerformance, Performance performance){
-        return basePerformance.getEndDateTime().isBefore(performance.getStartDateTime());
+    private boolean startsBeforeOtherPerformanceInReasonableTime(Performance basePerformance, Performance performance){
+        boolean startsBeforeMovie = basePerformance.getEndDateTime().isBefore(performance.getStartDateTime());
+        boolean startsInReaonableTime = basePerformance.getEndDateTime().plusMinutes(45).isAfter(performance.getStartDateTime());
+        return startsBeforeMovie && startsInReaonableTime;
     }
 }

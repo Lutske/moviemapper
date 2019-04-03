@@ -4,6 +4,7 @@ import enums.Cinema;
 import enums.Genre;
 import services.MovieService;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class Main {
     }
 
     private static void demoGetRealTimeMovieCombinationsExcludeGenre() {
-        List<Movie> movies = movieService.getAllMoviesAfterDateTime(Cinema.APELDOORN, "2019-04-01 17:00:00");
+        List<Movie> movies = movieService.getAllMoviesAfterDateTime(Cinema.APELDOORN, LocalDateTime.now());
 
         List<Genre> genres = new ArrayList<>();
         genres.add(Genre.THRILLER);
