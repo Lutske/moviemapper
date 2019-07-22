@@ -73,8 +73,6 @@ public class MovieService {
             });
 
             conn.disconnect();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -87,10 +85,6 @@ public class MovieService {
         try {
             Movie movie = mapper.readValue(new File(pathname), Movie.class);
             System.out.println(movie);
-        } catch (JsonGenerationException e) {
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -110,10 +104,6 @@ public class MovieService {
         try {
             movies = mapper.readValue(new File(pathname), new TypeReference<List<Movie>>() {
             });
-        } catch (JsonGenerationException e) {
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

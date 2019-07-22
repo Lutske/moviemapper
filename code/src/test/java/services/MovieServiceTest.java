@@ -10,14 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MovieServiceTest {
     private MovieService movieService = new MovieService();
 
     @Test
     @DisplayName("Read movies from file")
-    void readMoviesFromFile(){
+    void readMoviesFromFile() {
         List<Movie> movies = movieService.readMoviesFromFile();
 
         assertEquals(11, movies.size(), "Wrong number of movies");
@@ -29,7 +28,7 @@ public class MovieServiceTest {
 
     @Test
     @DisplayName("Get movie combinations")
-    void getMovieCombinations(){
+    void getMovieCombinations() {
         List<Movie> movies = movieService.readMoviesFromFile();
         List<MovieCombination> movieCombinations = movieService.getMovieCombinations(movies);
 
@@ -46,7 +45,7 @@ public class MovieServiceTest {
 
     @Test
     @DisplayName("Get movie combinations without genre")
-    void getMovieCombinationsExcludeGenres(){
+    void getMovieCombinationsExcludeGenres() {
         List<Genre> excludeGenres = new ArrayList<>();
         excludeGenres.add(Genre.THRILLER);
         excludeGenres.add(Genre.HORROR);
